@@ -1,16 +1,22 @@
 import { Module } from "@nestjs/common";
+import { ConfigModule } from "@nestjs/config";
 import { MongooseModule } from "@nestjs/mongoose";
 import { AppController } from "./app.controller";
 import { AppService } from "./app.service";
-import { CategoriesModule } from "./categories/categories.module";
-import { OrdersModule } from "./orders/orders.module";
-import { ProductsModule } from "./products/products.module";
-import { UsersModule } from "./users/users.module";
+import { CategoriesModule } from "./scopes/categories/categories.module";
+import { OrdersModule } from "./scopes/orders/orders.module";
+import { ProductsModule } from "./scopes/products/products.module";
+import { UsersModule } from "./scopes/users/users.module";
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ".env",
+      isGlobal: true,
+    }),
+
     MongooseModule.forRoot(
-      "mongodb://hakou:password@localhost:27000/dev?authSource=admin",
+      "mongodb://hakou:password@localhost:27017/dev?authSource=admin",
     ),
     UsersModule,
     OrdersModule,
