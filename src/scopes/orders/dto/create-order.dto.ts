@@ -9,7 +9,11 @@ export class OrderItemDto {
 }
 
 export class CreateOrderDto {
-  @ApiProperty({ description: "list of order items" })
+  @ApiProperty({
+    type: () => OrderItemDto,
+    isArray: true,
+    description: "List of order items",
+  })
   items: OrderItemDto[];
 
   @ApiProperty({
@@ -18,6 +22,10 @@ export class CreateOrderDto {
   })
   deliveryAddress: string;
 
-  @ApiProperty({ example: "2", description: "Some nets regarding the order" })
+  @ApiProperty({
+    example: "2",
+    description: "Some nets regarding the order",
+    required: false,
+  })
   notes?: string;
 }

@@ -1,4 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { PriceDto } from "./price.dto";
 
 export class CreateProductDto {
   @ApiProperty({
@@ -12,18 +13,11 @@ export class CreateProductDto {
   name: string;
 
   @ApiProperty({
-    example: "100",
-    description: "product cost price",
-    required: true,
+    type: PriceDto,
+    required: false,
+    description: "List of order items",
   })
-  costPrice: number;
-
-  @ApiProperty({
-    example: "120",
-    description: "product selling price",
-    required: true,
-  })
-  sellingPrice: number;
+  price?: PriceDto;
 
   @ApiProperty({ example: "milk", description: "product name", required: true })
   stockQuantity: number;

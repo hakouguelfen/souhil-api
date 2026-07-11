@@ -31,12 +31,21 @@ export class OrderItem {
   @Prop({ required: true })
   unitPrice: number;
 }
+// {
+//   name: "Steel Pipe 10mm",
+//   prices: {
+//     individual: { cost: 10, unitPrice: 15, cargoPrice: 2 },
+//     shop:       { cost: 10, unitPrice: 12, cargoPrice: 1 },
+//     factory:    { cost: 10, unitPrice: 9,  cargoPrice: 0 },
+//     vip:        { cost: 10, unitPrice: 8,  cargoPrice: 0 }
+//   }
+// }
 
 export const OrderItemSchema = SchemaFactory.createForClass(OrderItem);
 
-@Schema({ toJSON: { virtuals: true } })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Order {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   orderNumber: string;
 
   @Prop({
@@ -46,6 +55,9 @@ export class Order {
     index: true,
   })
   userId: mongoose.Types.ObjectId;
+
+  @Prop({ required: true })
+  clientTypeKey: string;
 
   @Prop({ type: [OrderItemSchema], required: true })
   items: OrderItem[];

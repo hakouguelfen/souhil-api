@@ -14,6 +14,7 @@ import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBody,
   ApiConsumes,
+  ApiExtraModels,
   ApiOperation,
   ApiParam,
   ApiQuery,
@@ -22,8 +23,10 @@ import {
 } from "@nestjs/swagger";
 import { CloudinaryService } from "src/shared/cloudinary.service";
 import { CreateProductDto, QueryProductDto } from "./dto/create-product.dto";
+import { PriceDto } from "./dto/price.dto";
 import { ProductResponseDto } from "./dto/response";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import { Price } from "./entities/price.entity";
 import { ProductsService } from "./products.service";
 
 @ApiTags("products")
@@ -36,6 +39,7 @@ export class ProductsController {
 
   // ── Public ────────────────────────────────────────────────────────────────
   @Get()
+  @ApiExtraModels(Price)
   @ApiOperation({
     summary: "List products — supports category filter, search, pagination",
     operationId: "findAll",
@@ -75,6 +79,24 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
+  @Get(":id/prices/:typeKey")
+  @ApiOperation({
+    summary: "Get a single product by ID",
+    operationId: "findPrice",
+  })
+  @ApiParam({ name: "id", description: "Product ID" })
+  @ApiParam({ name: "typeKey", description: "Product ID" })
+  @ApiResponse({
+    status: 200,
+    description: "Product found",
+    type: ProductResponseDto,
+  })
+  @ApiResponse({ status: 404, description: "Product not found" })
+  getPrice(@Param("id") id: string, @Param("typeKey") typeKey: string) {
+    // Get price for a specific client type — e.g. GET /products/:id/prices/shop
+    return this.productsService.findPriceForType(id, typeKey);
+  }
+
   // ── Admin ────────────────────────────────────────────────────────────────
   // Admin
   // @UseGuards(JwtAuthGuard, RolesGuard)
@@ -89,12 +111,10 @@ export class ProductsController {
   @ApiBody({
     schema: {
       type: "object",
-      required: ["categoryId", "name", "price", "stockQuantity", "image"],
+      required: ["categoryId", "name", "stockQuantity", "image"],
       properties: {
         categoryId: { type: "string", example: "XXXXXID" },
         name: { type: "string", example: "milk" },
-        costPrice: { nullable: true, type: "number", example: 9.99 },
-        sellingPrice: { nullable: true, type: "number", example: 9.99 },
         stockQuantity: { type: "number", example: 100 },
         description: { type: "string" },
         image: {
@@ -131,12 +151,11 @@ export class ProductsController {
   @ApiBody({
     schema: {
       type: "object",
-      required: ["categoryId", "name", "price", "stockQuantity", "image"],
+      required: ["categoryId", "name", "stockQuantity", "image"],
       properties: {
         categoryId: { nullable: true, type: "string", example: "XXXXXID" },
         name: { nullable: true, type: "string", example: "milk" },
-        costPrice: { nullable: true, type: "number", example: 9.99 },
-        sellingPrice: { nullable: true, type: "number", example: 9.99 },
+        isAvailable: { nullable: true, type: "boolean", example: "false" },
         stockQuantity: { nullable: true, type: "number", example: 100 },
         description: { nullable: true, type: "string" },
         image: {
@@ -169,6 +188,45 @@ export class ProductsController {
       ...dto,
       imageUrl: secure_url,
     });
+  }
+
+  @Patch(":id/prices/:typeKey")
+  @ApiOperation({
+    summary: "Update a product (admin only)",
+    operationId: "setPrice",
+  })
+  @ApiParam({ name: "id", description: "Product ID" })
+  @ApiParam({ name: "typeKey", description: "client ID" })
+  @ApiBody({ type: PriceDto })
+  @ApiResponse({
+    status: 200,
+    description: "Product updated",
+    type: ProductResponseDto,
+  })
+  @ApiResponse({ status: 404, description: "Product not found" })
+  setPrice(
+    @Param("id") id: string,
+    @Param("typeKey") typeKey: string,
+    @Body() price: PriceDto,
+  ) {
+    return this.productsService.setPriceForType(id, typeKey, price);
+  }
+
+  @Delete(":id/prices/:typeKey")
+  @ApiOperation({
+    summary: "Update a product (admin only)",
+    operationId: "removePrice",
+  })
+  @ApiParam({ name: "id", description: "Product ID" })
+  @ApiParam({ name: "typeKey", description: "client ID" })
+  @ApiResponse({
+    status: 200,
+    description: "Product updated",
+    type: ProductResponseDto,
+  })
+  @ApiResponse({ status: 404, description: "Product not found" })
+  removePrice(@Param("id") id: string, @Param("typeKey") typeKey: string) {
+    return this.productsService.removePriceForType(id, typeKey);
   }
 
   // Admin

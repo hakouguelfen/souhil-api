@@ -3,7 +3,7 @@ import type { HydratedDocument, Types } from "mongoose";
 
 export type CategoryDocument = HydratedDocument<Category>;
 
-@Schema({ toJSON: { virtuals: true } })
+@Schema({ timestamps: true, toJSON: { virtuals: true } })
 export class Category {
   @Prop({ required: true })
   name: string;

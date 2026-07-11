@@ -1,20 +1,30 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
+import { PriceDto } from "./price.dto";
 
-export class ProductResponseDto {
+export class CategoryDto {
   @ApiProperty()
   id: string;
 
   @ApiProperty()
-  categoryId: string;
+  name: string;
+}
+
+@ApiExtraModels(PriceDto)
+export class ProductResponseDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty({ type: CategoryDto })
+  categoryId: CategoryDto;
 
   @ApiProperty()
   name: string;
 
-  @ApiProperty()
-  costPrice: number;
-
-  @ApiProperty()
-  sellingPrice: number;
+  @ApiProperty({
+    type: "object",
+    additionalProperties: { $ref: getSchemaPath(PriceDto) },
+  })
+  prices: Record<string, PriceDto>;
 
   @ApiProperty()
   stockQuantity: number;

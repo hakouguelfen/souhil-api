@@ -5,28 +5,38 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { type Model, Types } from "mongoose";
-import {
-  Product,
-  type ProductDocument,
-} from "src/scopes/products/entities/product.entity";
-import type { CreateOrderDto } from "./dto/create-order.dto";
-import type { UpdateOrderDto } from "./dto/update-order.dto";
-import { Order, type OrderItem, OrderStatus } from "./entities/order.entity";
+import { ProductsService } from "../products/products.service";
+import { CreateOrderDto } from "./dto/create-order.dto";
+import { UpdateOrderDto } from "./dto/update-order.dto";
+import { Order, OrderItem, OrderStatus } from "./entities/order.entity";
 
 @Injectable()
 export class OrdersService {
   constructor(
     @InjectModel(Order.name) private orderModel: Model<Order>,
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
+    private productsService: ProductsService,
   ) { }
 
+  genOrderNumber() {
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    const prefix =
+      letters[Math.floor(Math.random() * letters.length)] +
+      letters[Math.floor(Math.random() * letters.length)];
+
+    const number = Math.floor(Math.random() * 1000)
+      .toString()
+      .padStart(3, "0");
+
+    return `${prefix}${number}`;
+  }
+
   async create(userId: string, dto: CreateOrderDto) {
+    // const client = await this.clientModel.findById(userId);
+
     // Fetch all products in one query
     const productIds = dto.items.map((item) => item.productId);
-    const products = await this.productModel
-      .find({ _id: { $in: productIds }, isAvailable: true })
-      .lean();
-
+    const products = await this.productsService.findAllAvailable(productIds);
     const productMap = new Map(products.map((p) => [p._id.toString(), p]));
 
     const insufficientStock: string[] = [];
@@ -57,11 +67,13 @@ export class OrdersService {
     // Build Order
     const orderItems = dto.items.map((item) => {
       const product = productMap.get(item.productId);
+      // const price = product?.prices.get(client.typeKey);
+
       return {
         productId: new Types.ObjectId(item.productId),
         name: product?.name,
         quantity: item.quantity,
-        unitPrice: product?.sellingPrice,
+        unitPrice: product?.prices.get("shop")!.unitPrice,
       } as OrderItem;
     });
     const totalAmount = orderItems.reduce(
@@ -72,15 +84,7 @@ export class OrdersService {
     // Decrement Stock
 
     for (const item of dto.items) {
-      const result = this.productModel
-        .findOneAndUpdate(
-          {
-            _id: item.productId,
-            stock_qty: { $gte: item.quantity },
-          },
-          { $inc: { stock_qty: -item.quantity } },
-        )
-        .exec();
+      const result = await this.productsService.decrementStock(item);
       if (!result) {
         // Another request grabbed the last stock between our check and now
         const product = productMap.get(item.productId);
@@ -92,6 +96,8 @@ export class OrdersService {
 
     return this.orderModel.create({
       userId: new Types.ObjectId(userId),
+      clientTypeKey: "shop", // client.typeKey
+      orderNumber: this.genOrderNumber(),
       items: orderItems,
       totalAmount,
       notes: dto.notes,
@@ -113,9 +119,14 @@ export class OrdersService {
       .exec();
   }
 
-  findByUser(userId: string): Promise<Order[]> {
+  findByUser(userId: string, status: string): Promise<Order[]> {
+    const filter: any = { userId: new Types.ObjectId(userId) };
+    if (status && status.toLowerCase() !== "all") {
+      filter.status = status;
+    }
+
     return this.orderModel
-      .find({ userId: new Types.ObjectId(userId) })
+      .find(filter)
       .sort({ createdAt: -1 })
       .populate("userId")
       .exec();

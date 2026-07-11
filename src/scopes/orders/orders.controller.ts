@@ -109,7 +109,11 @@ export class OrdersController {
   })
   @ApiResponse({ status: 404, description: "One or more products not found" })
   create(@Request() req: any, @Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(req.user_id, createOrderDto);
+    return this.ordersService.create(
+      "6a342b6c5e1843f7077f1a73",
+      createOrderDto,
+    );
+    // return this.ordersService.create(req.user_id, createOrderDto);
   }
 
   // JWT
@@ -124,8 +128,9 @@ export class OrdersController {
     description: "List of orders, most recent first",
     type: [OrderResponseDto],
   })
-  findUserOrders(@Request() req: any) {
-    return this.ordersService.findByUser(req.user_id);
+  findUserOrders(@Request() req: any, @Query("status") status: string) {
+    return this.ordersService.findByUser("6a342b6c5e1843f7077f1a73", status);
+    // return this.ordersService.findByUser(req.user_id, status);
   }
 
   // JWT
