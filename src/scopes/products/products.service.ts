@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { type Model, Types } from "mongoose";
-import type { OrderItemDto } from "../orders/dto/create-order.dto";
 import { CreateProductDto, QueryProductDto } from "./dto/create-product.dto";
 import type { PriceDto } from "./dto/price.dto";
 import { UpdateProductDto } from "./dto/update-product.dto";
@@ -135,14 +134,14 @@ export class ProductsService {
     return counts;
   }
 
-  async decrementStock(item: OrderItemDto) {
+  async decrementStock(productId: string, quantity: number) {
     const result = this.productModel
       .findOneAndUpdate(
         {
-          _id: item.productId,
-          stock_qty: { $gte: item.quantity },
+          _id: productId,
+          stockQuantity: { $gte: quantity },
         },
-        { $inc: { stock_qty: -item.quantity } },
+        { $inc: { stockQuantity: -quantity } },
       )
       .exec();
 

@@ -6,19 +6,24 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { CloudinaryService } from "src/shared/cloudinary.service";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { CategoryResponseDto } from "./dto/response";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
+import { FileInterceptor } from "@nestjs/platform-express";
 
 // const jwt = JwtAuth({
 //   audience: "web",
@@ -30,23 +35,52 @@ import { UpdateCategoryDto } from "./dto/update-category.dto";
 @Controller("categories")
 // @UseGuards(new AuthGuard(jwt))
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) { }
+  constructor(
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly categoriesService: CategoriesService,
+  ) { }
 
   // Admin
   @Post()
+  @UseInterceptors(FileInterceptor("image"))
   @ApiOperation({
     operationId: "create",
     summary: "Place a new category (cash on delivery)",
   })
-
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      required: ["name", "image"],
+      properties: {
+        name: { type: "string", example: "milk" },
+        image: {
+          nullable: true,
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: "Order created successfully" })
   @ApiResponse({
     status: 400,
     description: "Insufficient stock or invalid items",
   })
   @ApiResponse({ status: 404, description: "One or more products not found" })
-  create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoriesService.create(createCategoryDto);
+  async create(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: CreateCategoryDto,
+  ) {
+    const uploadResult = await this.cloudinaryService.uploadImage(
+      image,
+      "categories",
+    );
+
+    return this.categoriesService.create({
+      ...dto,
+      imageUrl: uploadResult.secure_url,
+    });
   }
 
   @Get()
@@ -79,16 +113,45 @@ export class CategoriesController {
 
   // Admin
   @Patch(":id")
-  @ApiBody({ type: UpdateCategoryDto })
-  @ApiOperation({ operationId: "update", summary: "Get a single order by ID" })
+  @UseInterceptors(FileInterceptor("image"))
   @ApiParam({ name: "id", description: "Order ID" })
+  @ApiOperation({ operationId: "update", summary: "Get a single order by ID" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      required: ["name", "image"],
+      properties: {
+        name: { type: "string", example: "milk" },
+        image: {
+          nullable: true,
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 200, description: "Order updated" })
   @ApiResponse({ status: 404, description: "Order not updated" })
-  update(
+  async update(
     @Param("id") id: string,
-    @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: UpdateCategoryDto,
   ) {
-    return this.categoriesService.update(id, updateCategoryDto);
+    let secure_url = dto.imageUrl;
+
+    if (image) {
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "categories",
+      );
+      secure_url = uploadResult.secure_url;
+    }
+
+    return this.categoriesService.update(id, {
+      ...dto,
+      imageUrl: secure_url,
+    });
   }
 
   // Admin

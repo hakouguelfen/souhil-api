@@ -1,11 +1,20 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class OrderItemDto {
   @ApiProperty({ example: "XXXXID", description: "The product id" })
   productId: string;
 
+  @ApiPropertyOptional({
+    example: "http://image",
+    description: "The product quantity",
+  })
+  imageUrl?: string;
+
   @ApiProperty({ example: "2", description: "The product quantity" })
-  quantity: number;
+  unitQuantity?: number;
+
+  @ApiProperty({ example: "2", description: "The product quantity" })
+  boxQuantity?: number;
 }
 
 export class CreateOrderDto {
@@ -21,6 +30,12 @@ export class CreateOrderDto {
     description: "The delivery qddress of user",
   })
   deliveryAddress: string;
+
+  @ApiProperty({
+    example: "Arris",
+    description: "The delivery qddress of user",
+  })
+  clientTypeKey: string;
 
   @ApiProperty({
     example: "2",

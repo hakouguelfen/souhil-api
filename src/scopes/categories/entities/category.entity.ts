@@ -9,7 +9,7 @@ export class Category {
   name: string;
 
   @Prop({ required: false })
-  image_url?: string;
+  imageUrl?: string;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

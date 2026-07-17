@@ -21,14 +21,28 @@ export class OrderItemResponseDto {
   @ApiProperty({ example: "Organic Bananas (1kg)" })
   name: string;
 
-  @ApiProperty({ example: 3 })
-  quantity: number;
+  @ApiProperty({ example: "Organic Bananas (1kg)" })
+  imageUrl?: string;
+
+  @ApiProperty({ example: 3, required: false })
+  unitQuantity?: number;
 
   @ApiProperty({
     example: 2.49,
     description: "Price snapshot at time of order",
+    required: false,
   })
-  unitPrice: number;
+  unitPrice?: number;
+
+  @ApiProperty({ example: 3, required: false })
+  boxQuantity?: number;
+
+  @ApiProperty({
+    example: 2.49,
+    description: "Price snapshot at time of order",
+    required: false,
+  })
+  boxPrice?: number;
 }
 
 export class OrderResponseDto {
@@ -41,11 +55,11 @@ export class OrderResponseDto {
   @ApiProperty({ type: UserResponseDto })
   userId: UserResponseDto;
 
+  @ApiProperty({ example: "AB214" })
+  clientTypeKey: string;
+
   @ApiProperty({ type: [OrderItemResponseDto] })
   items: OrderItemResponseDto[];
-
-  @ApiProperty({ example: 14.97 })
-  totalAmount: number;
 
   @ApiProperty({
     example: "pending",
@@ -58,6 +72,9 @@ export class OrderResponseDto {
     ],
   })
   status: string;
+
+  @ApiProperty({ example: 14.97 })
+  totalAmount: number;
 
   @ApiProperty({ example: "12 Baker Street, Apt 4, Springfield" })
   deliveryAddress: string;

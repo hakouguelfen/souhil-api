@@ -6,4 +6,10 @@ export class UpdateCategoryDto {
     description: "product name",
   })
   name?: string;
+
+  @ApiPropertyOptional({
+    example: "url",
+    description: "product name",
+  })
+  imageUrl?: string;
 }

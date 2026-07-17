@@ -131,7 +131,10 @@ export class ProductsController {
     @UploadedFile() image: Express.Multer.File,
     @Body() dto: CreateProductDto,
   ) {
-    const uploadResult = await this.cloudinaryService.uploadImage(image);
+    const uploadResult = await this.cloudinaryService.uploadImage(
+      image,
+      "products",
+    );
 
     return this.productsService.create({
       ...dto,
@@ -180,7 +183,10 @@ export class ProductsController {
     let secure_url = dto.imageUrl;
 
     if (image) {
-      const uploadResult = await this.cloudinaryService.uploadImage(image);
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "products",
+      );
       secure_url = uploadResult.secure_url;
     }
 

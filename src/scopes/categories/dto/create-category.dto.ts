@@ -5,5 +5,5 @@ export class CreateCategoryDto {
   name: string;
 
   @ApiProperty({ description: "The image of the user" })
-  image_url?: string;
+  imageUrl?: string;
 }

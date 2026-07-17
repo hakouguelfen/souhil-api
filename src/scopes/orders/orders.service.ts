@@ -33,6 +33,10 @@ export class OrdersService {
 
   async create(userId: string, dto: CreateOrderDto) {
     // const client = await this.clientModel.findById(userId);
+    // Raise an error
+    if (dto.clientTypeKey === "") {
+      throw new BadRequestException(`No clientType was selected`);
+    }
 
     // Fetch all products in one query
     const productIds = dto.items.map((item) => item.productId);
@@ -42,10 +46,15 @@ export class OrdersService {
     const insufficientStock: string[] = [];
     dto.items.forEach((item) => {
       const product = productMap.get(item.productId);
+      const price = product?.prices?.[dto.clientTypeKey];
 
-      if ((product?.stockQuantity ?? 0) < item.quantity) {
+      const quantity =
+        (price?.unitsPerBox ?? 0) * (item?.boxQuantity ?? 0) +
+        (item?.unitQuantity ?? 0);
+
+      if ((product?.stockQuantity ?? 0) < quantity) {
         insufficientStock.push(
-          `"${product?.name}" — requested ${item.quantity}, available ${product?.stockQuantity}`,
+          `"${product?.name}" — requested ${quantity}, available ${product?.stockQuantity}`,
         );
       }
     });
@@ -68,23 +77,39 @@ export class OrdersService {
     const orderItems = dto.items.map((item) => {
       const product = productMap.get(item.productId);
       // const price = product?.prices.get(client.typeKey);
+      const price = product?.prices?.[dto.clientTypeKey];
 
       return {
         productId: new Types.ObjectId(item.productId),
+        imageUrl: item.imageUrl,
         name: product?.name,
-        quantity: item.quantity,
-        unitPrice: product?.prices.get("shop")!.unitPrice,
+        unitQuantity: item.unitQuantity,
+        unitPrice: price.unitPrice,
+        boxQuantity: item.boxQuantity,
+        boxPrice: price.boxPrice,
       } as OrderItem;
     });
     const totalAmount = orderItems.reduce(
-      (sum, item) => sum + item.unitPrice * item.quantity,
+      (sum, item) =>
+        sum +
+        ((item.unitPrice ?? 0) * (item.unitQuantity ?? 0) +
+          (item.boxPrice ?? 0) * (item.boxQuantity ?? 0)),
       0,
     );
 
     // Decrement Stock
 
     for (const item of dto.items) {
-      const result = await this.productsService.decrementStock(item);
+      const product = productMap.get(item.productId);
+      const price = product?.prices?.[dto.clientTypeKey];
+      const quantity =
+        (price?.unitsPerBox ?? 0) * (item?.boxQuantity ?? 0) +
+        (item?.unitQuantity ?? 0);
+
+      const result = await this.productsService.decrementStock(
+        item.productId,
+        quantity,
+      );
       if (!result) {
         // Another request grabbed the last stock between our check and now
         const product = productMap.get(item.productId);
@@ -96,7 +121,7 @@ export class OrdersService {
 
     return this.orderModel.create({
       userId: new Types.ObjectId(userId),
-      clientTypeKey: "shop", // client.typeKey
+      clientTypeKey: dto.clientTypeKey, // client.typeKey
       orderNumber: this.genOrderNumber(),
       items: orderItems,
       totalAmount,

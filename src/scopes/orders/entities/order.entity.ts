@@ -25,11 +25,20 @@ export class OrderItem {
   @Prop({ required: true })
   name: string;
 
-  @Prop({ required: true, min: 1 })
-  quantity: number;
+  @Prop({ required: false })
+  imageUrl?: string;
 
-  @Prop({ required: true })
-  unitPrice: number;
+  @Prop({ required: false, min: 0 })
+  unitQuantity?: number;
+
+  @Prop({ required: false })
+  unitPrice?: number;
+
+  @Prop({ required: false, min: 0 })
+  boxQuantity?: number;
+
+  @Prop({ required: false })
+  boxPrice?: number;
 }
 // {
 //   name: "Steel Pipe 10mm",
@@ -70,7 +79,10 @@ export class Order {
   })
   status: string;
 
+  @Prop({ type: String, required: true })
   deliveryAddress: string;
+
+  @Prop({ type: String })
   notes: string;
 
   @Prop({ required: true })

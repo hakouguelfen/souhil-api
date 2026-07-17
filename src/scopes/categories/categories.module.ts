@@ -1,5 +1,6 @@
 import { Module } from "@nestjs/common";
 import { MongooseModule } from "@nestjs/mongoose";
+import { CloudinaryService } from "src/shared/cloudinary.service";
 import { CategoriesController } from "./categories.controller";
 import { CategoriesService } from "./categories.service";
 import { Category, CategorySchema } from "./entities/category.entity";
@@ -11,6 +12,6 @@ import { Category, CategorySchema } from "./entities/category.entity";
     ]),
   ],
   controllers: [CategoriesController],
-  providers: [CategoriesService],
+  providers: [CategoriesService, CloudinaryService],
 })
 export class CategoriesModule { }

@@ -4,12 +4,12 @@ import type { UploadApiResponse } from "cloudinary";
 import cloudinary from "cloudinary.config";
 
 export class CloudinaryService {
-  async uploadImage(file: Express.Multer.File) {
+  async uploadImage(file: Express.Multer.File, folder: string) {
     return new Promise<UploadApiResponse>((resolve, reject) => {
       cloudinary.uploader
         .upload_stream(
           {
-            folder: "products",
+            folder: folder,
           },
           (error, result) => {
             if (error) return reject(error);
