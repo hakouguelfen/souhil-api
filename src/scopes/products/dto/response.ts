@@ -1,4 +1,9 @@
-import { ApiExtraModels, ApiProperty, getSchemaPath } from "@nestjs/swagger";
+import {
+  ApiExtraModels,
+  ApiProperty,
+  ApiPropertyOptional,
+  getSchemaPath,
+} from "@nestjs/swagger";
 import { PriceDto } from "./price.dto";
 
 export class CategoryDto {
@@ -25,8 +30,8 @@ export class ProductResponseDto {
   @ApiProperty({ type: CategoryDto })
   categoryId: CategoryDto;
 
-  @ApiProperty({ type: BrandDto })
-  brandId: BrandDto;
+  @ApiPropertyOptional({ type: BrandDto, nullable: true })
+  brandId?: BrandDto;
 
   @ApiProperty()
   name: string;

@@ -40,7 +40,7 @@ export class ProductsService {
         .find(filter)
         .populate("categoryId")
         .populate("brandId")
-        .skip(skip)
+        // .skip(skip)
         .limit(limit)
         .exec(),
 
