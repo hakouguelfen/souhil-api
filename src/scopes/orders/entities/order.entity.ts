@@ -82,6 +82,12 @@ export class Order {
   @Prop({ type: String, required: true })
   deliveryAddress: string;
 
+  @Prop({ required: false })
+  latitude?: number;
+
+  @Prop({ required: false })
+  longitude?: number;
+
   @Prop({ type: String })
   notes: string;
 

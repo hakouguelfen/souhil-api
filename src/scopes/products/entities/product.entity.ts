@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import mongoose, { type HydratedDocument } from "mongoose";
 import { Category } from "src/scopes/categories/entities/category.entity";
 import { type Price, PriceSchema } from "./price.entity";
+import { Brand } from "src/scopes/brands/entities/brand.entity";
 
 export type ProductDocument = HydratedDocument<Product>;
 
@@ -14,6 +15,14 @@ export class Product {
     index: true,
   })
   categoryId: mongoose.Types.ObjectId;
+
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    ref: Brand.name,
+    required: true,
+    index: true,
+  })
+  brandId: mongoose.Types.ObjectId;
 
   @Prop({ required: true, trim: true })
   name: string;
@@ -51,6 +60,7 @@ ProductSchema.set("toObject", { flattenMaps: true });
 
 // Compound index for the most common query: available products in a category
 ProductSchema.index({ categoryId: 1, isAvailable: 1 });
+ProductSchema.index({ brandId: 1, isAvailable: 1 });
 
 // Text index for search
 ProductSchema.index({ name: "text", description: "text" });

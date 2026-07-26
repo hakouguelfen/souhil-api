@@ -9,6 +9,13 @@ export class CreateProductDto {
   })
   categoryId: string;
 
+  @ApiProperty({
+    example: "XXXXXID",
+    description: "brand id",
+    required: true,
+  })
+  brandId: string;
+
   @ApiProperty({ example: "milk", description: "product name", required: true })
   name: string;
 
@@ -32,6 +39,9 @@ export class CreateProductDto {
 export class QueryProductDto {
   @ApiPropertyOptional({ example: "milk", description: "product name" })
   category?: string;
+
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  brand?: string;
 
   @ApiPropertyOptional({ example: "milk", description: "product name" })
   search?: string;

@@ -23,6 +23,10 @@ export class ProductsService {
       filter.categoryId = new Types.ObjectId(query.category);
     }
 
+    if (query.brand) {
+      filter.brandId = new Types.ObjectId(query.brand);
+    }
+
     if (query.search) {
       filter.name = { $regex: query.search, $options: "i" };
     }
@@ -31,10 +35,11 @@ export class ProductsService {
     const limit = Math.min(50, query.limit ?? 20);
     const skip = (page - 1) * limit;
 
-    const [items, total] = await Promise.all([
+    const [items, _total] = await Promise.all([
       this.productModel
         .find(filter)
         .populate("categoryId")
+        .populate("brandId")
         .skip(skip)
         .limit(limit)
         .exec(),
@@ -55,6 +60,7 @@ export class ProductsService {
     const doc = await this.productModel
       .findById(id)
       .populate("categoryId")
+      .populate("brandId")
       .exec();
     if (!doc) throw new NotFoundException(`Category #${id} not found`);
     return doc;
@@ -79,7 +85,8 @@ export class ProductsService {
         { $set: { [`prices.${key}`]: price } },
         { returnDocument: "after" },
       )
-      .populate("categoryId");
+      .populate("categoryId")
+      .populate("brandId");
     if (!updated) throw new NotFoundException("Product not found");
     return updated;
   }
@@ -92,6 +99,7 @@ export class ProductsService {
         { $unset: { [`prices.${key}`]: "" } },
         { returnDocument: "after" },
       )
+      .populate("brandId")
       .populate("categoryId");
 
     if (!updated) throw new NotFoundException("Product not found");
@@ -107,6 +115,7 @@ export class ProductsService {
     return this.productModel
       .findByIdAndUpdate(id, cleanDto, { returnDocument: "after" })
       .populate("categoryId")
+      .populate("brandId")
       .exec();
   }
 
@@ -120,6 +129,7 @@ export class ProductsService {
     const docs = await this.productModel
       .find({ _id: { $in: ids }, isAvailable: true })
       .populate("categoryId")
+      .populate("brandId")
       .lean();
 
     return docs as (Product & { _id: Types.ObjectId })[];

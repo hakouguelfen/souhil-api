@@ -1,4 +1,4 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class UserResponseDto {
   @ApiProperty()
@@ -79,7 +79,24 @@ export class OrderResponseDto {
   @ApiProperty({ example: "12 Baker Street, Apt 4, Springfield" })
   deliveryAddress: string;
 
-  @ApiProperty({ example: "Leave at the door, ring twice", required: false })
+  @ApiPropertyOptional({
+    example: "12 Baker Street, Apt 4, Springfield",
+    required: false,
+    nullable: true,
+  })
+  latitude?: number;
+
+  @ApiPropertyOptional({
+    example: "12 Baker Street, Apt 4, Springfield",
+    required: false,
+    nullable: true,
+  })
+  longitude?: number;
+
+  @ApiPropertyOptional({
+    example: "Leave at the door, ring twice",
+    required: false,
+  })
   notes?: string;
 
   @ApiProperty({

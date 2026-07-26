@@ -8,6 +8,12 @@ export class UpdateProductDto {
   categoryId?: string;
 
   @ApiPropertyOptional({
+    example: "XXXXXID",
+    description: "category id",
+  })
+  brandId?: string;
+
+  @ApiPropertyOptional({
     example: "milk",
     description: "product name",
   })

@@ -32,6 +32,18 @@ export class CreateOrderDto {
   deliveryAddress: string;
 
   @ApiProperty({
+    example: "11.42",
+    description: "The latitude",
+  })
+  latitude: number;
+
+  @ApiProperty({
+    example: "12.44",
+    description: "The longitude",
+  })
+  longitude: number;
+
+  @ApiProperty({
     example: "Arris",
     description: "The delivery qddress of user",
   })

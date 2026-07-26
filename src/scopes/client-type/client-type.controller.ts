@@ -6,14 +6,19 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
+  UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBody,
+  ApiConsumes,
   ApiOperation,
   ApiParam,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
+import { CloudinaryService } from "src/shared/cloudinary.service";
 import { ClientTypeService } from "./client-type.service";
 import { CreateClientTypeDto } from "./dto/create-client-type.dto";
 import { ClientTypeResponseDto } from "./dto/response";
@@ -22,32 +27,96 @@ import { UpdateClientTypeDto } from "./dto/update-client-type.dto";
 @ApiTags("client-type")
 @Controller("client-type")
 export class ClientTypeController {
-  constructor(private readonly clientTypeService: ClientTypeService) { }
+  constructor(
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly clientTypeService: ClientTypeService,
+  ) { }
 
   @Post()
+  @UseInterceptors(FileInterceptor("image"))
   @ApiOperation({
     operationId: "create",
     summary: "Place a new category (cash on delivery)",
   })
-
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      required: ["key", "label", "active", "image"],
+      properties: {
+        key: { type: "string", example: "milk" },
+        label: { type: "string", example: "milk" },
+        active: { type: "boolean", example: "milk" },
+        image: {
+          nullable: true,
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 201, description: "Order created successfully" })
   @ApiResponse({
     status: 400,
     description: "Insufficient stock or invalid items",
   })
   @ApiResponse({ status: 404, description: "One or more products not found" })
-  create(@Body() createClientTypeDto: CreateClientTypeDto) {
-    return this.clientTypeService.create(createClientTypeDto);
+  async create(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: CreateClientTypeDto,
+  ) {
+    const uploadResult = await this.cloudinaryService.uploadImage(
+      image,
+      "clientType",
+    );
+
+    return this.clientTypeService.create({
+      ...dto,
+      imageUrl: uploadResult.secure_url,
+    });
   }
 
   @Patch(":id")
-  @ApiBody({ type: UpdateClientTypeDto })
-  @ApiOperation({ operationId: "update", summary: "Get a single order by ID" })
+  @UseInterceptors(FileInterceptor("image"))
   @ApiParam({ name: "id", description: "Order ID" })
+  @ApiOperation({ operationId: "update", summary: "Get a single order by ID" })
+  @ApiConsumes("multipart/form-data")
+  @ApiBody({
+    schema: {
+      type: "object",
+      required: ["label", "active", "image"],
+      properties: {
+        label: { type: "string", example: "milk" },
+        active: { type: "boolean", example: "milk" },
+        image: {
+          nullable: true,
+          type: "string",
+          format: "binary",
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 200, description: "Order updated" })
   @ApiResponse({ status: 404, description: "Order not updated" })
-  update(@Param("id") id: string, @Body() dto: UpdateClientTypeDto) {
-    return this.clientTypeService.update(id, dto);
+  async update(
+    @Param("id") id: string,
+    @UploadedFile() image: Express.Multer.File,
+    @Body() dto: UpdateClientTypeDto,
+  ) {
+    let secure_url = dto.imageUrl;
+
+    if (image) {
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "clientType",
+      );
+      secure_url = uploadResult.secure_url;
+    }
+
+    return this.clientTypeService.update(id, {
+      ...dto,
+      imageUrl: secure_url,
+    });
   }
 
   @Get()

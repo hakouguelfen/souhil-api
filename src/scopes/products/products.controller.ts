@@ -44,6 +44,7 @@ export class ProductsController {
     summary: "List products — supports category filter, search, pagination",
     operationId: "findAll",
   })
+  @ApiQuery({ name: "brand", required: false, type: String })
   @ApiQuery({ name: "category", required: false, type: String })
   @ApiQuery({ name: "search", required: false, type: String })
   @ApiQuery({ name: "page", required: false, type: Number })
@@ -56,6 +57,7 @@ export class ProductsController {
   findAll(@Query() query: QueryProductDto) {
     // NOTE Examples
     // GET /products                              → all available products
+    // GET /products?brand=<id>                   → filter by brand
     // GET /products?category=<id>                → filter by category
     // GET /products?search=tomato                → search by name
     // GET /products?category=<id>&search=tomato  → both combined
@@ -111,9 +113,10 @@ export class ProductsController {
   @ApiBody({
     schema: {
       type: "object",
-      required: ["categoryId", "name", "stockQuantity", "image"],
+      required: ["categoryId", "brandId", "name", "stockQuantity", "image"],
       properties: {
         categoryId: { type: "string", example: "XXXXXID" },
+        brandId: { type: "string", example: "XXXXXID" },
         name: { type: "string", example: "milk" },
         stockQuantity: { type: "number", example: 100 },
         description: { type: "string" },
@@ -154,9 +157,10 @@ export class ProductsController {
   @ApiBody({
     schema: {
       type: "object",
-      required: ["categoryId", "name", "stockQuantity", "image"],
+      required: ["brandId", "name", "stockQuantity", "image"],
       properties: {
         categoryId: { nullable: true, type: "string", example: "XXXXXID" },
+        brandId: { nullable: true, type: "string", example: "XXXXXID" },
         name: { nullable: true, type: "string", example: "milk" },
         isAvailable: { nullable: true, type: "boolean", example: "false" },
         stockQuantity: { nullable: true, type: "number", example: 100 },

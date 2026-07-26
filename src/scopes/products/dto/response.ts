@@ -9,6 +9,14 @@ export class CategoryDto {
   name: string;
 }
 
+export class BrandDto {
+  @ApiProperty()
+  id: string;
+
+  @ApiProperty()
+  name: string;
+}
+
 @ApiExtraModels(PriceDto)
 export class ProductResponseDto {
   @ApiProperty()
@@ -16,6 +24,9 @@ export class ProductResponseDto {
 
   @ApiProperty({ type: CategoryDto })
   categoryId: CategoryDto;
+
+  @ApiProperty({ type: BrandDto })
+  brandId: BrandDto;
 
   @ApiProperty()
   name: string;
