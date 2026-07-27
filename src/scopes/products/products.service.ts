@@ -41,7 +41,7 @@ export class ProductsService {
         .populate("categoryId")
         .populate("brandId")
         // .skip(skip)
-        .limit(limit)
+        // .limit(limit)
         .exec(),
 
       this.productModel.countDocuments(filter),

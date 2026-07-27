@@ -11,6 +11,9 @@ export class ClientType {
 
   @Prop({ required: true })
   active: boolean;
+
+  @Prop({ required: false })
+  imageUrl?: string;
 }
 
 export const ClientTypeSchema = SchemaFactory.createForClass(ClientType);

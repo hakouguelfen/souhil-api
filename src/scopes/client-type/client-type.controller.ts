@@ -65,14 +65,19 @@ export class ClientTypeController {
     @UploadedFile() image: Express.Multer.File,
     @Body() dto: CreateClientTypeDto,
   ) {
-    const uploadResult = await this.cloudinaryService.uploadImage(
-      image,
-      "clientType",
-    );
+    let imageUrl: string | undefined;
+
+    if (image) {
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "clientType",
+      );
+      imageUrl = uploadResult.secure_url;
+    }
 
     return this.clientTypeService.create({
       ...dto,
-      imageUrl: uploadResult.secure_url,
+      imageUrl: imageUrl,
     });
   }
 

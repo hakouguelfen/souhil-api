@@ -72,14 +72,19 @@ export class BrandsController {
     @UploadedFile() image: Express.Multer.File,
     @Body() dto: CreateBrandDto,
   ) {
-    const uploadResult = await this.cloudinaryService.uploadImage(
-      image,
-      "brands",
-    );
+    let imageUrl: string | undefined;
+
+    if (image) {
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "brands",
+      );
+      imageUrl = uploadResult.secure_url;
+    }
 
     return this.brandsService.create({
       ...dto,
-      imageUrl: uploadResult.secure_url,
+      imageUrl: imageUrl,
     });
   }
 

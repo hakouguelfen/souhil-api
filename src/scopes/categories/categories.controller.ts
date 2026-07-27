@@ -72,14 +72,19 @@ export class CategoriesController {
     @UploadedFile() image: Express.Multer.File,
     @Body() dto: CreateCategoryDto,
   ) {
-    const uploadResult = await this.cloudinaryService.uploadImage(
-      image,
-      "categories",
-    );
+    let imageUrl: string | undefined;
+
+    if (image) {
+      const uploadResult = await this.cloudinaryService.uploadImage(
+        image,
+        "categories",
+      );
+      imageUrl = uploadResult.secure_url;
+    }
 
     return this.categoriesService.create({
       ...dto,
-      imageUrl: uploadResult.secure_url,
+      imageUrl: imageUrl,
     });
   }
 

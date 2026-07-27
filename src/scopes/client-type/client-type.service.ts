@@ -29,7 +29,7 @@ export class ClientTypeService {
 
   update(id: string, dto: UpdateClientTypeDto): Promise<ClientType | null> {
     return this.clientTypeModel
-      .findByIdAndUpdate(id, dto, { new: true })
+      .findByIdAndUpdate(id, dto, { returnDocument: "after" })
       .exec();
   }
 

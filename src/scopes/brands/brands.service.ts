@@ -51,7 +51,9 @@ export class BrandsService {
   }
 
   update(id: string, dto: UpdateBrandDto): Promise<Brand | null> {
-    return this.brandModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    return this.brandModel
+      .findByIdAndUpdate(id, dto, { returnDocument: "after" })
+      .exec();
   }
 
   remove(id: string): Promise<Brand | null> {

@@ -90,7 +90,9 @@ export class CategoriesService {
   }
 
   update(id: string, dto: UpdateCategoryDto): Promise<Category | null> {
-    return this.categoryModel.findByIdAndUpdate(id, dto, { new: true }).exec();
+    return this.categoryModel
+      .findByIdAndUpdate(id, dto, { returnDocument: "after" })
+      .exec();
   }
 
   remove(id: string): Promise<Category | null> {

@@ -1,4 +1,4 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty } from "@nestjs/swagger";
 
 export class CreateClientTypeDto {
   @ApiProperty({ example: "hakou", description: "The username of the user" })
@@ -10,6 +10,6 @@ export class CreateClientTypeDto {
   @ApiProperty({ description: "The image of the user" })
   active: boolean;
 
-  @ApiPropertyOptional({ description: "The image of the user" })
+  @ApiProperty({ description: "The image of the user" })
   imageUrl?: string;
 }
