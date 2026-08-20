@@ -15,4 +15,7 @@ export class ClientTypeResponseDto {
 
   @ApiProperty()
   productCount: number;
+
+  @ApiProperty({ nullable: true, required: false })
+  imageUrl?: string;
 }

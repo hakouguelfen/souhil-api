@@ -1,3 +1,5 @@
+import { JwtAuth } from "@anzar-auth/server";
+import { AuthGuard } from "@anzar-auth/server/nestjs";
 import {
   Body,
   Controller,
@@ -8,6 +10,7 @@ import {
   Post,
   Query,
   Request,
+  UseGuards,
 } from "@nestjs/common";
 import {
   ApiBearerAuth,
@@ -21,6 +24,11 @@ import { CreateOrderDto } from "./dto/create-order.dto";
 import { OrderResponseDto } from "./dto/response";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { OrdersService } from "./orders.service";
+
+const jwt = JwtAuth({
+  audience: "customers",
+  issuerBaseURL: "http://localhost:3000",
+});
 
 @ApiTags("orders")
 @Controller("orders")
@@ -94,9 +102,24 @@ export class OrdersController {
     return this.ordersService.remove(id);
   }
 
+  // JWT
+  @Patch(":id")
+  @ApiBearerAuth()
+  @ApiOperation({
+    operationId: "updateOrder",
+    summary: "Update an order (e.g. address or notes, while pending)",
+  })
+  @ApiParam({ name: "id", description: "Order ID" })
+  @ApiResponse({ status: 200, description: "Order updated" })
+  @ApiResponse({ status: 404, description: "Order not found" })
+  update(@Param("id") id: string, @Body() updateOrderDto: UpdateOrderDto) {
+    return this.ordersService.update(id, updateOrderDto);
+  }
+
   // ── Public ────────────────────────────────────────────────────────────────
   // JWT
   @Post()
+  @UseGuards(new AuthGuard(jwt))
   @ApiBearerAuth()
   @ApiOperation({
     operationId: "placeOrder",
@@ -109,15 +132,12 @@ export class OrdersController {
   })
   @ApiResponse({ status: 404, description: "One or more products not found" })
   create(@Request() req: any, @Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.create(
-      "6a342b6c5e1843f7077f1a73",
-      createOrderDto,
-    );
-    // return this.ordersService.create(req.user_id, createOrderDto);
+    return this.ordersService.create(req.user_id, createOrderDto);
   }
 
   // JWT
   @Get()
+  @UseGuards(new AuthGuard(jwt))
   @ApiBearerAuth()
   @ApiOperation({
     operationId: "findUserOrders",
@@ -129,12 +149,12 @@ export class OrdersController {
     type: [OrderResponseDto],
   })
   findUserOrders(@Request() req: any, @Query("status") status: string) {
-    return this.ordersService.findByUser("6a342b6c5e1843f7077f1a73", status);
-    // return this.ordersService.findByUser(req.user_id, status);
+    return this.ordersService.findByUser(req.user_id, status);
   }
 
   // JWT
   @Get(":id")
+  @UseGuards(new AuthGuard(jwt))
   @ApiBearerAuth()
   @ApiOperation({
     operationId: "findUserOrder",
@@ -149,19 +169,5 @@ export class OrdersController {
   @ApiResponse({ status: 404, description: "Order not found" })
   findUserOrder(@Request() req: any, @Param("id") id: string) {
     return this.ordersService.findOneByUser(id, req.user_id);
-  }
-
-  // JWT
-  @Patch(":id")
-  @ApiBearerAuth()
-  @ApiOperation({
-    operationId: "updateOrder",
-    summary: "Update an order (e.g. address or notes, while pending)",
-  })
-  @ApiParam({ name: "id", description: "Order ID" })
-  @ApiResponse({ status: 200, description: "Order updated" })
-  @ApiResponse({ status: 404, description: "Order not found" })
-  update(@Param("id") id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.update(id, updateOrderDto);
   }
 }

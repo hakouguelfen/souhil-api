@@ -32,7 +32,6 @@ export class OrdersService {
   }
 
   async create(userId: string, dto: CreateOrderDto) {
-    // const client = await this.clientModel.findById(userId);
     // Raise an error
     if (dto.clientTypeKey === "") {
       throw new BadRequestException(`No clientType was selected`);
@@ -124,6 +123,8 @@ export class OrdersService {
       clientTypeKey: dto.clientTypeKey, // client.typeKey
       orderNumber: this.genOrderNumber(),
       items: orderItems,
+      latitude: dto.latitude,
+      longitude: dto.longitude,
       totalAmount,
       notes: dto.notes,
       status: OrderStatus.PENDING,
@@ -183,7 +184,7 @@ export class OrdersService {
 
   update(id: string, dto: UpdateOrderDto): Promise<Order | null> {
     return this.orderModel
-      .findByIdAndUpdate(id, dto, { new: true })
+      .findByIdAndUpdate(id, dto, { returnDocument: "after" })
       .populate("userId")
       .exec();
   }

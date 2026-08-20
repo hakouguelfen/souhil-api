@@ -18,8 +18,8 @@ import { UsersModule } from "./scopes/users/users.module";
     }),
 
     MongooseModule.forRoot(
-      // "mongodb://hakou:password@localhost:27017/dev?authSource=admin",
-      "mongodb+srv://hakou:JHy67RIX7TdfR8xo@clustertest.iaim59e.mongodb.net/?appName=ClusterTest",
+      "mongodb://hakou:password@localhost:27017/dev?authSource=admin",
+      // "mongodb+srv://hakou:JHy67RIX7TdfR8xo@clustertest.iaim59e.mongodb.net/?appName=ClusterTest",
     ),
     UsersModule,
     OrdersModule,

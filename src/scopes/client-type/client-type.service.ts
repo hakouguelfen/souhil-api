@@ -43,11 +43,12 @@ export class ClientTypeService {
       .find(filter)
       .lean({ virtuals: true });
 
-    return clientTypes.map(({ _id, key, label, active }) => ({
+    return clientTypes.map(({ _id, key, label, active, imageUrl }) => ({
       id: _id.toString(),
       key,
       label,
       active,
+      imageUrl: imageUrl,
       productCount: countMap.get(key) ?? 0,
     }));
   }

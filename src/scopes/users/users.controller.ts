@@ -1,34 +1,41 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { Controller, Get, Param, Patch } from "@nestjs/common";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+} from "@nestjs/swagger";
+import { UserResponseDto } from "../orders/dto/response";
+import { UsersService } from "./users.service";
 
-@Controller('users')
+@Controller("users")
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
-  }
-
-  @Get()
+  @Get("accounts")
+  @ApiBearerAuth()
+  @ApiOperation({
+    operationId: "findNewUsers",
+    summary: "Get the current user's order history",
+  })
+  @ApiResponse({
+    status: 200,
+    description: "List of orders, most recent first",
+    type: [UserResponseDto],
+  })
   findAll() {
     return this.usersService.findAll();
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @Patch("account/:id")
+  @ApiBearerAuth()
+  @ApiOperation({
+    operationId: "activateAccount",
+  })
+  @ApiParam({ name: "id", description: "User ID" })
+  @ApiResponse({ status: 200, description: "Order updated" })
+  @ApiResponse({ status: 404, description: "Order not found" })
+  activateAccount(@Param("id") id: string) {
+    return this.usersService.updateAccount(id);
   }
 }

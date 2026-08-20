@@ -5,13 +5,10 @@ export class UserResponseDto {
   id: string;
 
   @ApiProperty()
-  name: string;
+  username: string;
 
   @ApiProperty()
   email: string;
-
-  @ApiProperty()
-  phone: string;
 }
 
 export class OrderItemResponseDto {
@@ -82,14 +79,12 @@ export class OrderResponseDto {
   @ApiPropertyOptional({
     example: "12 Baker Street, Apt 4, Springfield",
     required: false,
-    nullable: true,
   })
   latitude?: number;
 
   @ApiPropertyOptional({
     example: "12 Baker Street, Apt 4, Springfield",
     required: false,
-    nullable: true,
   })
   longitude?: number;
 
@@ -99,14 +94,14 @@ export class OrderResponseDto {
   })
   notes?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: "2026-06-17T10:32:00.000Z",
     required: false,
     nullable: true,
   })
   createdAt?: string;
 
-  @ApiProperty({
+  @ApiPropertyOptional({
     example: "2026-06-17T10:32:00.000Z",
     required: false,
     nullable: true,

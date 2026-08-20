@@ -6,10 +6,8 @@ export type UserDocument = HydratedDocument<User>;
 @Schema({ toJSON: { virtuals: true } })
 export class User {
   @Prop({ required: true })
-  name: string;
-
+  username: string;
   email: string;
-  phone: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

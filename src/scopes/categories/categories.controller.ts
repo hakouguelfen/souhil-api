@@ -9,6 +9,7 @@ import {
   UploadedFile,
   UseInterceptors,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
 import {
   ApiBearerAuth,
   ApiBody,
@@ -23,17 +24,10 @@ import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { CategoryResponseDto } from "./dto/response";
 import { UpdateCategoryDto } from "./dto/update-category.dto";
-import { FileInterceptor } from "@nestjs/platform-express";
-
-// const jwt = JwtAuth({
-//   audience: "web",
-//   issuerBaseURL: "localhost:3000",
-// });
 
 @ApiTags("categories")
 @ApiBearerAuth()
 @Controller("categories")
-// @UseGuards(new AuthGuard(jwt))
 export class CategoriesController {
   constructor(
     private readonly cloudinaryService: CloudinaryService,
