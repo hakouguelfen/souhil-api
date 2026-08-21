@@ -70,12 +70,12 @@ export class OrdersController {
 
   // Admin
   @Patch(":id/status")
-  @ApiBody({ type: UpdateOrderDto })
   @ApiBearerAuth()
   @ApiOperation({
     operationId: "updateOrderStatus",
     summary: "Update order status (admin only)",
   })
+  @ApiBody({ type: UpdateOrderDto })
   @ApiParam({ name: "id", description: "Order ID" })
   @ApiResponse({
     status: 200,

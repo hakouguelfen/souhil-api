@@ -4,6 +4,7 @@ import { Model, Types } from "mongoose";
 import { Account } from "./entities/account.entity";
 import { User } from "./entities/user.entity";
 import { UserRole } from "./entities/user_roles.entity";
+import { UpdateAccountDto } from "./dto/update_account.dto";
 
 @Injectable()
 export class UsersService {
@@ -12,7 +13,7 @@ export class UsersService {
     @InjectModel(Account.name) private accountModel: Model<Account>,
   ) { }
 
-  async findAll(): Promise<User[]> {
+  async findAll(role: string): Promise<User[]> {
     return await this.userRoleModel
       .aggregate([
         {
@@ -24,7 +25,7 @@ export class UsersService {
           },
         },
         { $unwind: "$role" },
-        { $match: { "role.name": "user" } },
+        { $match: { "role.name": role } },
         {
           $lookup: {
             from: "users",
@@ -34,15 +35,50 @@ export class UsersService {
           },
         },
         { $unwind: "$user" },
-        { $replaceRoot: { newRoot: "$user" } },
+        {
+          $lookup: {
+            from: "accounts",
+            localField: "userId",
+            foreignField: "userId",
+            as: "account",
+          },
+        },
+        {
+          $unwind: {
+            path: "$account",
+            preserveNullAndEmptyArrays: true,
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: [
+                "$user",
+                { accountVerified: "$account.verified" },
+              ],
+            },
+          },
+        },
       ])
+      .project({
+        id: { $toString: "$_id" },
+        username: 1,
+        email: 1,
+        accountStatus: { $ifNull: ["$accountVerified", false] },
+      })
       .exec();
   }
 
-  async updateAccount(userId: string) {
+  async findAccount(userId: string) {
+    const doc = await this.accountModel.findOne({ userId }).exec();
+    if (!doc) throw new NotFoundException(`userId #${userId} not found`);
+    return doc;
+  }
+
+  async updateAccount(userId: string, body: UpdateAccountDto) {
     const result = await this.accountModel.findOneAndUpdate(
       { userId },
-      { $set: { verified: true } },
+      { $set: { verified: body.verified } },
       { returnDocument: "after" },
     );
     if (!result) {
