@@ -64,6 +64,7 @@ export class UsersController {
   })
   @ApiResponse({ status: 404, description: "Order not found" })
   findAccount(@Request() req: any) {
+    console.log(req.user_id);
     return this.usersService.findAccount(req.user_id);
   }
 

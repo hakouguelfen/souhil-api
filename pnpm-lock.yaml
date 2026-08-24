@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@anzar-auth/server':
-        specifier: ^1.7.10
-        version: 1.7.10(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
+        specifier: ^1.7.13
+        version: 1.7.13(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       '@nestjs/common':
         specifier: ^11.2.1
         version: 11.2.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
@@ -139,12 +139,12 @@ packages:
     resolution: {integrity: sha512-/PZmyAlb2NGWPikRRuiWLdfHQd8Wrx6lX4HqvTcaDhlU43M3T0ud4PH2T3QDp7BzHYY92xtD8iPxX2asg67G1A==}
     engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
-  '@anzar-auth/core@1.7.10':
-    resolution: {integrity: sha512-+JCBqakIQmB4aaVoGuG1Yj1+EhLfXBkzAz/xw1+x/iqTXCxoZUD0HHnW3wVXkPa100TTEqHtwTo0ooSV/Q+ngw==}
+  '@anzar-auth/core@1.7.13':
+    resolution: {integrity: sha512-8OAOm00gQqWwXmmGBsO3Xpvr3P79Y3HWV2Ltv4ftonYGVRjUifnF0s51NXtMXtaOwS3YgdCumxTLLPeJuAprNg==}
     engines: {node: '>=18'}
 
-  '@anzar-auth/server@1.7.10':
-    resolution: {integrity: sha512-FaE3GRYtSEGsv/mEJ+M4ZSoZSYiLorX3allllfYNu4u9DMRjXkerVGHZj1OFbiPQ0VOBXMTCzDgM3xS97sbwcA==}
+  '@anzar-auth/server@1.7.13':
+    resolution: {integrity: sha512-Kgy498p/Rl+qWNoyw7Xheql1EuM+iiRbXWpCCcwFSoRAkcBxyAxnPtA0JV5CRtpwXPW3H+mqd7eGlf6Y4v6ntQ==}
     engines: {node: '>=18'}
 
   '@babel/code-frame@7.29.7':
@@ -3005,13 +3005,13 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@anzar-auth/core@1.7.10':
+  '@anzar-auth/core@1.7.13':
     dependencies:
       openapi-fetch: 0.17.0
 
-  '@anzar-auth/server@1.7.10(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)':
+  '@anzar-auth/server@1.7.13(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)':
     dependencies:
-      '@anzar-auth/core': 1.7.10
+      '@anzar-auth/core': 1.7.13
       '@nestjs/common': 11.2.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       jose: 6.2.10
     transitivePeerDependencies:
