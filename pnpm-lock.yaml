@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@anzar-auth/server':
-        specifier: ^1.7.13
-        version: 1.7.13(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
+        specifier: link:~/Desktop/Anzar/SDKs/TS/packages/server
+        version: link:../../Anzar/SDKs/TS/packages/server
       '@nestjs/common':
         specifier: ^11.2.1
         version: 11.2.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
@@ -138,14 +138,6 @@ packages:
   '@angular-devkit/schematics@19.2.27':
     resolution: {integrity: sha512-/PZmyAlb2NGWPikRRuiWLdfHQd8Wrx6lX4HqvTcaDhlU43M3T0ud4PH2T3QDp7BzHYY92xtD8iPxX2asg67G1A==}
     engines: {node: ^18.19.1 || ^20.11.1 || >=22.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
-
-  '@anzar-auth/core@1.7.13':
-    resolution: {integrity: sha512-8OAOm00gQqWwXmmGBsO3Xpvr3P79Y3HWV2Ltv4ftonYGVRjUifnF0s51NXtMXtaOwS3YgdCumxTLLPeJuAprNg==}
-    engines: {node: '>=18'}
-
-  '@anzar-auth/server@1.7.13':
-    resolution: {integrity: sha512-Kgy498p/Rl+qWNoyw7Xheql1EuM+iiRbXWpCCcwFSoRAkcBxyAxnPtA0JV5CRtpwXPW3H+mqd7eGlf6Y4v6ntQ==}
-    engines: {node: '>=18'}
 
   '@babel/code-frame@7.29.7':
     resolution: {integrity: sha512-Aup7aUOfpbAUg2ROOJN6Iw5f9DMBlzu0mIkm/malLQFN/YQgO48wCj0Kxa3sEHJvPVFg7siR+qRInwXd2qhQKw==}
@@ -2001,9 +1993,6 @@ packages:
       node-notifier:
         optional: true
 
-  jose@6.2.10:
-    resolution: {integrity: sha512-iiW7J9qRFlGxvCOIBDBDxFePQSn7ZMAnrYGhrrOo6siO/MIqwfyilLR27pkfDgUk+raLuzADS8A3S/KLBisc0g==}
-
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -2281,12 +2270,6 @@ packages:
   onetime@5.1.2:
     resolution: {integrity: sha512-kbpaSSGJTWdAY5KPVeMOKXSrPtr8C8C7wodJbcsd51jRnmD+GZu8Y0VoU6Dm5Z4vWr0Ig/1NKuWRKf7j5aaYSg==}
     engines: {node: '>=6'}
-
-  openapi-fetch@0.17.0:
-    resolution: {integrity: sha512-PsbZR1wAPcG91eEthKhN+Zn92FMHxv+/faECIwjXdxfTODGSGegYv0sc1Olz+HYPvKOuoXfp+0pA2XVt2cI0Ig==}
-
-  openapi-typescript-helpers@0.1.0:
-    resolution: {integrity: sha512-OKTGPthhivLw/fHz6c3OPtg72vi86qaMlqbJuVJ23qOvQ+53uw1n7HdmkJFibloF7QEjDrDkzJiOJuockM/ljw==}
 
   ora@5.4.1:
     resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
@@ -3004,22 +2987,6 @@ snapshots:
       rxjs: 7.8.1
     transitivePeerDependencies:
       - chokidar
-
-  '@anzar-auth/core@1.7.13':
-    dependencies:
-      openapi-fetch: 0.17.0
-
-  '@anzar-auth/server@1.7.13(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)':
-    dependencies:
-      '@anzar-auth/core': 1.7.13
-      '@nestjs/common': 11.2.1(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
-      jose: 6.2.10
-    transitivePeerDependencies:
-      - class-transformer
-      - class-validator
-      - reflect-metadata
-      - rxjs
-      - supports-color
 
   '@babel/code-frame@7.29.7':
     dependencies:
@@ -5197,8 +5164,6 @@ snapshots:
       - supports-color
       - ts-node
 
-  jose@6.2.10: {}
-
   js-tokens@4.0.0: {}
 
   js-yaml@3.15.0:
@@ -5410,12 +5375,6 @@ snapshots:
   onetime@5.1.2:
     dependencies:
       mimic-fn: 2.1.0
-
-  openapi-fetch@0.17.0:
-    dependencies:
-      openapi-typescript-helpers: 0.1.0
-
-  openapi-typescript-helpers@0.1.0: {}
 
   ora@5.4.1:
     dependencies:

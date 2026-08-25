@@ -27,7 +27,7 @@ import { OrdersService } from "./orders.service";
 
 const jwt = JwtAuth({
   audience: "customers",
-  issuerBaseURL: "http://localhost:3000",
+  issuerBaseURL: "https://anzar-render.onrender.com",
 });
 
 @ApiTags("orders")
