@@ -82,6 +82,8 @@ export class OrdersService {
         productId: new Types.ObjectId(item.productId),
         imageUrl: item.imageUrl,
         name: product?.name,
+        brand: item.brand,
+        category: item.category,
         unitQuantity: item.unitQuantity,
         unitPrice: price.unitPrice,
         boxQuantity: item.boxQuantity,

@@ -19,6 +19,12 @@ export class OrderItemResponseDto {
   name: string;
 
   @ApiProperty({ example: "Organic Bananas (1kg)" })
+  category: string;
+
+  @ApiProperty({ example: "Organic Bananas (1kg)" })
+  brand: string;
+
+  @ApiProperty({ example: "Organic Bananas (1kg)" })
   imageUrl?: string;
 
   @ApiProperty({ example: 3, required: false })

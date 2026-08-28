@@ -25,6 +25,12 @@ export class OrderItem {
   @Prop({ required: true })
   name: string;
 
+  @Prop({ required: true })
+  category: string;
+
+  @Prop({ required: true })
+  brand: string;
+
   @Prop({ required: false })
   imageUrl?: string;
 

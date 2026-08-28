@@ -4,6 +4,12 @@ export class OrderItemDto {
   @ApiProperty({ example: "XXXXID", description: "The product id" })
   productId: string;
 
+  @ApiProperty({ example: "XXXXID", description: "category name" })
+  category: string;
+
+  @ApiProperty({ example: "XXXXID", description: "brand name" })
+  brand: string;
+
   @ApiPropertyOptional({
     example: "http://image",
     description: "The product quantity",

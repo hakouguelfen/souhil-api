@@ -21,12 +21,13 @@ import {
   AccountResponseDto,
   UserAccountsResponseDto,
 } from "./dto/account_response.dto";
-import { UsersService } from "./users.service";
 import { UpdateAccountDto } from "./dto/update_account.dto";
+import { UsersService } from "./users.service";
 
 const jwt = JwtAuth({
   audience: "customers",
   issuerBaseURL: "https://anzar-render.onrender.com",
+  // issuerBaseURL: "http://localhost:3000",
 });
 
 @ApiTags("users")
@@ -64,7 +65,6 @@ export class UsersController {
   })
   @ApiResponse({ status: 404, description: "Order not found" })
   findAccount(@Request() req: any) {
-    console.log(req.user_id);
     return this.usersService.findAccount(req.user_id);
   }
 

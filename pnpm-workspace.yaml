@@ -2,5 +2,5 @@ allowBuilds:
   '@scarf/scarf': true
   unrs-resolver: true
 minimumReleaseAgeExclude:
-  - '@anzar-auth/core@1.7.13'
-  - '@anzar-auth/server@1.7.13'
+  - '@anzar-auth/core@1.7.13 || 1.7.14'
+  - '@anzar-auth/server@1.7.13 || 1.7.14'
