@@ -1,7 +1,7 @@
 // cloudinary.service.ts
 
 import type { UploadApiResponse } from "cloudinary";
-import cloudinary from "cloudinary.config";
+import cloudinary from "../../cloudinary.config";
 
 export class CloudinaryService {
   async uploadImage(file: Express.Multer.File, folder: string) {
