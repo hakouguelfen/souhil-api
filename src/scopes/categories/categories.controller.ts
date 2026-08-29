@@ -19,7 +19,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CloudinaryService } from "src/shared/cloudinary.service";
+import { CloudinaryService } from "../../shared/cloudinary.service";
 import { CategoriesService } from "./categories.service";
 import { CreateCategoryDto } from "./dto/create-category.dto";
 import { CategoryResponseDto } from "./dto/response";

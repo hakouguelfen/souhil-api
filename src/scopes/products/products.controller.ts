@@ -21,7 +21,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CloudinaryService } from "src/shared/cloudinary.service";
+import { CloudinaryService } from "../../shared/cloudinary.service";
 import { CreateProductDto, QueryProductDto } from "./dto/create-product.dto";
 import { PriceDto } from "./dto/price.dto";
 import { ProductResponseDto } from "./dto/response";

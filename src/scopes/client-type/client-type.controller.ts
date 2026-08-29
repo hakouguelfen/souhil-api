@@ -18,7 +18,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CloudinaryService } from "src/shared/cloudinary.service";
+import { CloudinaryService } from "../../shared/cloudinary.service";
 import { ClientTypeService } from "./client-type.service";
 import { CreateClientTypeDto } from "./dto/create-client-type.dto";
 import { ClientTypeResponseDto } from "./dto/response";

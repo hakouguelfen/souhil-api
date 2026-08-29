@@ -5,7 +5,7 @@ import {
 } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import type { Model } from "mongoose";
-import { ProductsService } from "src/scopes/products/products.service";
+import { ProductsService } from "../products/products.service";
 import { CreateClientTypeDto } from "./dto/create-client-type.dto";
 import { UpdateClientTypeDto } from "./dto/update-client-type.dto";
 import { ClientType } from "./entities/client-type.entity";
