@@ -17,10 +17,7 @@ import { UsersModule } from "./scopes/users/users.module";
       isGlobal: true,
     }),
 
-    MongooseModule.forRoot(
-      // "mongodb://hakou:password@localhost:27017/dev?authSource=admin",
-      "mongodb+srv://hakou:JHy67RIX7TdfR8xo@clustertest.iaim59e.mongodb.net/dev?appName=ClusterTest",
-    ),
+    MongooseModule.forRoot(process.env.MONGODB_URI ?? "noDB found"),
     UsersModule,
     OrdersModule,
     ProductsModule,
