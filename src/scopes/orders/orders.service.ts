@@ -125,6 +125,8 @@ export class OrdersService {
       clientTypeKey: dto.clientTypeKey, // client.typeKey
       orderNumber: this.genOrderNumber(),
       items: orderItems,
+      phone: dto.phone,
+      shop: dto.shop,
       latitude: dto.latitude,
       longitude: dto.longitude,
       totalAmount,

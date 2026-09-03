@@ -83,6 +83,18 @@ export class OrderResponseDto {
   deliveryAddress: string;
 
   @ApiPropertyOptional({
+    example: "0000000000000",
+    required: false,
+  })
+  phone?: string;
+
+  @ApiPropertyOptional({
+    example: "shop name",
+    required: false,
+  })
+  shop?: string;
+
+  @ApiPropertyOptional({
     example: "12 Baker Street, Apt 4, Springfield",
     required: false,
   })

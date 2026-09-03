@@ -41,11 +41,26 @@ export class CreateOrderDto {
     example: "11.42",
     description: "The latitude",
   })
+  phone: string;
+
+  @ApiProperty({
+    example: "11.42",
+    description: "The latitude",
+    required: false,
+  })
+  shop: string;
+
+  @ApiProperty({
+    example: "11.42",
+    description: "The latitude",
+    required: false,
+  })
   latitude: number;
 
   @ApiProperty({
     example: "12.44",
     description: "The longitude",
+    required: false,
   })
   longitude: number;
 
