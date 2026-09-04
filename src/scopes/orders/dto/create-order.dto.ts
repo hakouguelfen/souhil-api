@@ -77,3 +77,20 @@ export class CreateOrderDto {
   })
   notes?: string;
 }
+
+export class QueryOrderDto {
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  status?: string;
+
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  orderId?: string;
+
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  search?: string;
+
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  page?: number;
+
+  @ApiPropertyOptional({ example: "milk", description: "product name" })
+  limit?: number;
+}

@@ -6,7 +6,7 @@ import {
 import { InjectModel } from "@nestjs/mongoose";
 import { type Model, Types } from "mongoose";
 import { ProductsService } from "../products/products.service";
-import { CreateOrderDto } from "./dto/create-order.dto";
+import { CreateOrderDto, QueryOrderDto } from "./dto/create-order.dto";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { Order, OrderItem, OrderStatus } from "./entities/order.entity";
 
@@ -136,10 +136,14 @@ export class OrdersService {
     });
   }
 
-  findAll(status: string): Promise<Order[]> {
+  findAll(query: QueryOrderDto): Promise<Order[]> {
     const filter: any = {};
-    if (status && status.toLowerCase() !== "all") {
-      filter.status = status;
+    if (query.status && query.status.toLowerCase() !== "all") {
+      filter.status = query.status;
+    }
+
+    if (query.search) {
+      filter.orderNumber = { $regex: query.search, $options: "i" };
     }
 
     return this.orderModel
@@ -198,7 +202,7 @@ export class OrdersService {
       [OrderStatus.PENDING]: [OrderStatus.CONFIRMED, OrderStatus.CANCELLED],
       [OrderStatus.CONFIRMED]: [OrderStatus.OUT_FOR_DELIVERY],
       [OrderStatus.OUT_FOR_DELIVERY]: [OrderStatus.DELIVERED],
-      [OrderStatus.DELIVERED]: [],
+      [OrderStatus.DELIVERED]: [OrderStatus.OUT_FOR_DELIVERY],
       [OrderStatus.CANCELLED]: [],
     };
 

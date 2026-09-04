@@ -20,7 +20,7 @@ import {
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
-import { CreateOrderDto } from "./dto/create-order.dto";
+import { CreateOrderDto, QueryOrderDto } from "./dto/create-order.dto";
 import { OrderResponseDto } from "./dto/response";
 import { UpdateOrderDto } from "./dto/update-order.dto";
 import { OrdersService } from "./orders.service";
@@ -48,8 +48,9 @@ export class OrdersController {
     description: "List of orders, most recent first",
     type: [OrderResponseDto],
   })
-  findAll(@Query("status") status: string) {
-    return this.ordersService.findAll(status);
+  //
+  findAll(@Query() query: QueryOrderDto) {
+    return this.ordersService.findAll(query);
   }
 
   @Get("admin/:id")
