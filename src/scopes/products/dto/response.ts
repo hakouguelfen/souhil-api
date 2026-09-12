@@ -52,5 +52,10 @@ export class ProductResponseDto {
   imageUrl?: string;
 
   @ApiProperty({ nullable: true, required: false })
+  imageWidth?: number;
+  @ApiProperty({ nullable: true, required: false })
+  imageHeight?: number;
+
+  @ApiProperty({ nullable: true, required: false })
   description?: string;
 }

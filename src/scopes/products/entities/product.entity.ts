@@ -39,6 +39,11 @@ export class Product {
   @Prop()
   imageUrl?: string;
 
+  @Prop()
+  imageWidth?: number;
+  @Prop()
+  imageHeight?: number;
+
   @Prop({ default: true, index: true })
   isAvailable: boolean;
 

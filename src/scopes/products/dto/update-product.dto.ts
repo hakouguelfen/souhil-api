@@ -48,6 +48,17 @@ export class UpdateProductDto {
   })
   imageUrl?: string;
 
+  @ApiPropertyOptional({
+    example: "url",
+    description: "product name",
+  })
+  imageWidth?: number;
+  @ApiPropertyOptional({
+    example: "url",
+    description: "product name",
+  })
+  imageHeight?: number;
+
   @ApiPropertyOptional({ description: "product name", required: false })
   description?: string;
 }

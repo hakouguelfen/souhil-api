@@ -32,6 +32,11 @@ export class CreateProductDto {
   @ApiProperty({ example: "url", description: "product name", required: false })
   imageUrl?: string;
 
+  @ApiProperty({ example: "url", description: "product name", required: false })
+  imageWidth?: number;
+  @ApiProperty({ example: "url", description: "product name", required: false })
+  imageHeight?: number;
+
   @ApiProperty({ description: "product name", required: false })
   description?: string;
 }

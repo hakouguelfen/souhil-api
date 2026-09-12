@@ -119,6 +119,8 @@ export class ProductsController {
         brandId: { type: "string", example: "XXXXXID" },
         name: { type: "string", example: "milk" },
         stockQuantity: { type: "number", example: 100 },
+        imageWidth: { type: "number" },
+        imageHeight: { type: "number" },
         description: { type: "string" },
         image: {
           nullable: true,
@@ -142,6 +144,8 @@ export class ProductsController {
     return this.productsService.create({
       ...dto,
       imageUrl: uploadResult.secure_url,
+      imageWidth: uploadResult.width,
+      imageHeight: uploadResult.height,
     });
   }
 
@@ -165,6 +169,8 @@ export class ProductsController {
         isAvailable: { nullable: true, type: "boolean", example: "false" },
         stockQuantity: { nullable: true, type: "number", example: 100 },
         description: { nullable: true, type: "string" },
+        imageWidth: { type: "number" },
+        imageHeight: { type: "number" },
         image: {
           nullable: true,
           type: "string",
@@ -185,6 +191,8 @@ export class ProductsController {
     @Body() dto: UpdateProductDto,
   ) {
     let secure_url = dto.imageUrl;
+    let imageWidth = dto.imageWidth;
+    let imageHeight = dto.imageHeight;
 
     if (image) {
       const uploadResult = await this.cloudinaryService.uploadImage(
@@ -192,11 +200,15 @@ export class ProductsController {
         "products",
       );
       secure_url = uploadResult.secure_url;
+      imageWidth = uploadResult.width;
+      imageHeight = uploadResult.height;
     }
 
     return this.productsService.update(id, {
       ...dto,
       imageUrl: secure_url,
+      imageWidth,
+      imageHeight,
     });
   }
 
